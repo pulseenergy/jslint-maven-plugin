@@ -63,10 +63,9 @@ public class JslintMojo extends AbstractMojo {
     
     /**
      * A comma-separated list of directories to exclude
-     * Added by DZH.
      * @parameter expression="${exclude}" default-value=""
      */
-    private String exclude;
+    private String exclude; // NOTE-DZH: I added this
 
     /**
      * Show me what you're doing.
@@ -159,7 +158,7 @@ public class JslintMojo extends AbstractMojo {
         for (String file : srcDirs) {
       	  files.addAll(FileUtils.listFiles(new File(file), new String[] { "js" }, true));
         }
-        /* modified by DZH; we don't want external js files to break the build */
+        // NOTE-DZH: required to avoid linting third party js files
         for (String file : excludeDirs) {
             files.removeAll(FileUtils.listFiles(new File(file), new String[] { "js" }, true));
         }
@@ -182,7 +181,7 @@ public class JslintMojo extends AbstractMojo {
     private List<String> buildPredefList() {
         List<String> defs = newArrayList();
         if (StringUtils.isNotEmpty(predef)) {
-            defs.add(String.format("--predef %s", predef));
+            defs.add(String.format("--predef %s", predef)); // NOTE-DZH: original version was --predef=%s, but that didn't work; this is closer
         }
         return defs;
     }
